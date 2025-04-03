@@ -1,25 +1,24 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import { syncRoutes } from './routes/sync.js';
-
-dotenv.config();
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+require('dotenv').config();
+const respaldoRoutes = require('./routes/respaldoRoutes');
 
 const app = express();
-app.use(express.json({ limit: '50mb' }));
 
-mongoose.connect(process.env.MONGODB_URI)
+app.use(bodyParser.json());
+
+
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
   .then(() => console.log('Conectado a MongoDB'))
-  .catch(err => console.error('No se pudo conectar a MongoDB', err));
+  .catch(err => console.log(err));
 
-app.use('/api', syncRoutes);
+app.use(respaldoRoutes);
 
-
-app.get('/', (req, res) => {
-  res.send('API de respaldo para sistema de ganado');
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor ejecutándose en el puerto ${PORT}`);
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Servidor corriendo en el puerto ${port}`);
 });
