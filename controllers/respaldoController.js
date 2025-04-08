@@ -1,7 +1,7 @@
 const respaldoService = require('../services/respaldoService');
 
 const createRespaldo = async (req, res) => {
-  const { totalMachos, totalHembras, detalleMachos, detalleHembras, estadoAnimales } = req.body;
+  const { totalMachos, totalHembras, detalleMachos, detalleHembras, estadoAnimales, deviceId } = req.body;
 
   try {
     const respaldo = await respaldoService.createRespaldo({
@@ -9,7 +9,8 @@ const createRespaldo = async (req, res) => {
       totalHembras,
       detalleMachos,
       detalleHembras,
-      estadoAnimales
+      estadoAnimales,
+      deviceId
     });
     res.status(201).json({
       message: 'Respaldo creado exitosamente',
@@ -21,15 +22,26 @@ const createRespaldo = async (req, res) => {
 };
 
 const getRespaldos = async (req, res) => {
+  const deviceId = req.query.deviceId;
+
   try {
-    const respaldos = await respaldoService.getRespaldos();
+    let respaldos;
+    
+    if (deviceId) {
+      respaldos = await respaldoService.getRespaldosByDeviceId(deviceId);
+    } else {
+  
+      return res.status(400).json({ message: 'Device ID es requerido para obtener los respaldos.' });
+    }
+
     const respuesta = respaldos.map((respaldo) => ({
       idRespaldo: respaldo._id.toString(),
       fechaRespaldo: respaldo.createdAt.getTime() / 1000,
-      respaldo
+      respaldo,
     }));
 
     res.json({ respaldos: respuesta });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

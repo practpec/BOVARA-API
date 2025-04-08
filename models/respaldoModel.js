@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const respaldoSchema = new mongoose.Schema({
+  deviceId: { type: String, required: true },
   totalMachos: Number,
   totalHembras: Number,
   detalleMachos: {

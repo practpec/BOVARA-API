@@ -8,17 +8,13 @@ const app = express();
 
 app.use(bodyParser.json());
 
-
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-  .then(() => console.log('Conectado a MongoDB'))
-  .catch(err => console.log(err));
+mongoose.connect(process.env.MONGODB_URI)
+.then(() => console.log('Conectado a MongoDB'))
+.catch(err => console.log(err));
 
 app.use(respaldoRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Servidor corriendo en el puerto ${port}`);
+    console.log(`Servidor corriendo en el puerto ${port}`);
 });

@@ -1,0 +1,42 @@
+CREATE TABLE ganado (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    numeroArete TEXT NOT NULL,
+    apodo TEXT,
+    sexo TEXT NOT NULL,
+    tipo TEXT NOT NULL,
+    color TEXT NOT NULL,
+    fechaNacimiento INTEGER,
+    madreId INTEGER,
+    cantidadCrias INTEGER NOT NULL,
+    estado TEXT NOT NULL,
+    imagenUrl TEXT,
+    imagenesSecundarias TEXT,
+    fechaRegistro INTEGER NOT NULL,
+    FOREIGN KEY (madreId) REFERENCES ganado(id)
+);
+CREATE TABLE crianza (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    madreId INTEGER NOT NULL,
+    criaId INTEGER NOT NULL,
+    fechaNacimiento INTEGER NOT NULL,
+    notas TEXT,
+    fechaRegistro INTEGER NOT NULL,
+    FOREIGN KEY (madreId) REFERENCES ganado(id),
+    FOREIGN KEY (criaId) REFERENCES ganado(id)
+);
+CREATE TABLE medicamentos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    descripcion TEXT NOT NULL,
+    fechaAplicacion INTEGER NOT NULL,
+    dosisML REAL NOT NULL,
+    ganadoId INTEGER,
+    tipo TEXT NOT NULL,
+    esProgramado INTEGER NOT NULL,
+    lote TEXT,
+    aplicado INTEGER NOT NULL,
+    fechaProgramada INTEGER,
+    recordatorio INTEGER NOT NULL,
+    notas TEXT,
+    FOREIGN KEY (ganadoId) REFERENCES ganado(id)
+);
